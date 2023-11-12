@@ -1,0 +1,667 @@
+\documentclass{beamer}
+%Information to be included in the title page:
+\title{Matching Problem in Different Complexity Classes }
+\author{Rishav Gupta}
+\institute[CMI]{Chennai Mathematical Institute}
+\date{2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usepackage{amsthm}
+\usetheme[numbering=fraction]{metropolis}
+\usepackage{fontspec}
+\usepackage[english]{babel}
+\usepackage{comment}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\newtheorem{definition}{Definition}[section]
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{corollary}{Corollary}[theorem]
+%\newtheorem{lemma}[theorem]{Lemma}
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+%\usepackage{biblatex}
+\setbeamertemplate{frametitle continuation}{}
+%\usecolortheme{metropolis}
+\usecolortheme{metropolis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Fonts
+\usefonttheme{serif} % using non standard fonts for beamer
+%\usefonttheme{professionalfont} % default family is serif
+%\setbeamerfont{title}{family=\fontspec{JosefinSans}}
+%\setbeamerfont{title page}{family=\fontspec{JosefinSans}}
+%\setmainfont{JosefinSans-Medium}
+%\setmainfont{Liberation Serif}
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\definecolor{beaublue}{rgb}{0.74, 0.83, 0.9}
+\definecolor{lavenderpurple}{rgb}{0.59, 0.48, 0.71}
+\definecolor{mediumorchid}{rgb}{0.73, 0.33, 0.83}
+%\setbeamercolor{palette primary}{use=structure,fg=white,bg=mediumorchid}
+%\setbeamercolor{progress bar}{fg=mediumorchid,bg=lavenderpurple}
+%\usecolortheme{seahorse}%\setbeamercolor{title separator}{beaublue}
+\addbibresource{bi.bib}
+%\renewcommand*{\bibfont}{\normalfont\small}
+%\setmainfont{Liberation Serif}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usefonttheme{structuresmallcapsserif}
+\begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\frame{\titlepage}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\setmainfont{Liberation Serif}
+	\begin{frame}
+		\frametitle{Table of Contents}
+		\tableofcontents
+	\end{frame}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Abstract}
+	\begin{frame}{Abstract}
+		I'll present the following three papers .
+		\begin{itemize}
+			\item The polynomially bounded Perfect Matching is in $NC^2$[Agrawal,Hoang,Thierauf] \cite{agrawal07}
+			\item On the Matching Problem for Special Graph Classes[Hoang] \cite{htm10}
+			\item Planar Maximum Matching : Towards a Parallel Algorithm[Datta,Kulkarni,Kumar,Mukherjee] \cite{datta18}
+			
+		\end{itemize}
+		The first paper will show all perfect matchings of a graph with a polynomially bounded number of perfect matchings can be constructed in $NC^2$.
+		\\
+		The second paper will show for polynomially bounded number of perfect matchings, SEARCH-PM is in $C_{=}L \cap \bigoplus L $ and COUNTING-PM is in $C_{=}L$.
+		
+		
+	\end{frame}
+	\begin{frame}{Abstract}
+		The third paper will show that Maximum-Matching Search $NC$ reduces to Maximum-Matching Decision in planar graphs. 
+		\\More generally , it was shown that for a class of graphs closed under vertex deletions and edge contractions , there is an $NC$ algorithm for Maximum Matching Search in the class with oracle queries to Maximum-Matching Size , Maximum-Bipartite-Matching Search and Perfect-Matching Search all for same class of graph.
+		
+	\end{frame}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Preliminaries}
+	\subsection{Definitions}
+	\begin{frame}{Definitions}
+		\begin{itemize}
+			\item \textbf{Matching} - Let $G=(V,E)$ be a graph then a matching $M$ is just a subset of edges $M\subseteq E$ such that no two edges in $M$ have a vertex in common.
+			\item \textbf{Perfect Matching} - Let $G=(V,E)$ be a graph then a perfect matching $M$ is just a subset of edges $M\subseteq E$ such that no two edges in $M$ have a vertex in common and $M$ covers all the vertices of $G$.
+			\item \textbf{Maximum Matching} - The matching of maximum cardinality is known as maximum  matching.
+			\end{itemize}
+		\end{frame}
+	\begin{frame}{Definitions}
+			\begin{itemize}
+			\item \textbf{Bipartite Tutte Matrix} - Let $G$ be bipartite, that is we can partition the nodes into $V=L \cup R$ such that there are no edges in $L$ and in $R$. We assume w.l.o.g. that $|L|= |R|=n$, otherwise $G$ has no perfect matching. The bipartite adjacency matrix of $G$ is the $n \times n$ matrix $A=\left(a_{i, j}\right)$, where
+			$$
+			a_{i, j}= \begin{cases}1 & \text { if }(i, j) \in E, \text { for } i \in L \text { and } j \in R, \\ 0 & \text { otherwise. }\end{cases}
+			$$
+			
+			The bipartite Tutte matrix of $G$ is the $n \times n$ matrix $T=\left(t_{i, j}\right)$, where
+			$$
+			t_{i, j}=a_{i, j} x_{i, j}
+			$$
+			for indeterminates $x_{i, j}$. The determinant of $T$ is
+			$$
+			\operatorname{det}(T)=\sum_{\pi \in S_n} \operatorname{sign}(\pi) \prod_{i=1}^n a_{i, \pi(i)} x_{i, \pi(i)}
+			$$
+		\end{itemize}
+		
+		
+	\end{frame}
+	\begin{frame}{Definitions}
+		\textbf{General Tutte Matrix} - Let $G$ be a graph with $n$ nodes. W.l.o.g. assume that $n$ is even, otherwise $G$ has no perfect matchings. Let $A=\left(a_{i, j}\right)$ be the $n \times n$ adjacency matrix of $G$. Note that $A$ is symmetric. The skew-symmetric Tutte matrix of $G$ is the $n \times n$ matrix $T=\left(t_{i, j}\right)$, where
+		$$
+		t_{i, j}= \begin{cases}a_{i, j} x_{i, j}, & \text { if } i \leq j, \\ -a_{j, i} x_{j, i}, & \text { otherwise, }\end{cases}
+		$$
+		for indeterminates $x_{i, j}$. The Pfaffian of $T$ is
+		$$
+		\operatorname{pf}(T)=\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot \prod_{\substack{(i, j) \in M \\ i<j}} a_{i, j} x_{i, j} .
+		$$
+	\end{frame}
+	\begin{frame}{Definitions}
+		The sign is defined as follows. Consider perfect matching
+		$$
+		M=\left\{\left(i_1, j_1\right),\left(i_2, j_2\right), \ldots,\left(i_k, j_k\right)\right\} \in P M(G)
+		$$
+		for $k=n / 2$. By convention, we have $i_l<j_l$ for all $l$. The sign of $M$ is defined as the sign of the permutation
+		\begin{equation}
+			\left(\begin{array}{ccccccc}
+				1 & 2 & 3 & 4 & \cdots & n-1 & n \\
+				i_1 & j_1 & i_2 & j_2 & \cdots & i_k & j_k
+			\end{array}\right) \in S_n
+		\end{equation}
+	\end{frame}
+	\begin{frame}{Definitions}
+		It is known that the sign of $M$ does not depend on the order in which the edges are given, i.e. the sign is well defined.
+		$\operatorname{pf}(T)$ is a multi-linear polynomial. Each non-vanishing term $\operatorname{sign}(M)$. $\prod_{(i,j)\in M,i<j} x_{i, j}$ corresponds to one perfect matching $M \in P M(G)$. The Pfaffian 
+		and the determinant of a matrix are known to be closely related as we know that .
+			$$det(T)=(pfaffian(T))^2$$
+			
+	\end{frame}
+	\begin{frame}{Tutte's Theorem}
+		\begin{theorem}[Tutte's Theorem]
+			A graph $G$ has a perfect matching $\iff$ $det(T(G)) \neq 0$.
+		\end{theorem}
+		
+		 
+		
+	\end{frame}
+	\begin{frame}[allowframebreaks]{Definitions}
+		\begin{itemize}
+			\item\textbf{Nice Cycle} - Let $G$ be a graph which has a perfect matching .An even cycle $C$ of $G$ is said to be nice if $G \setminus C$ also has a perfect matching.
+			\item\textbf{Circulation} - The absolute value difference of weights of the two perfect matchings in an even cycle $C$ is called the circulation of the cycle $C$ and is denoted by $circ(C)$.(Since an even cycle contains exactly two perfect matchings.)
+			\item \textbf{Non Vanishing Circulation} - A non vanishing circulation is just a weight assignmnet to the edges so that for all nice cycles $N$ , $circ(N)>0$.
+			
+		\end{itemize}
+		
+		
+	\end{frame}
+\subsection{Complexity Classes}
+\begin{frame}[allowframebreaks]{Complexity Classes}
+	\begin{itemize}
+		
+		\item \textbf{$NC^i$} - The class of boolean functions that can be computed with polynomial size , fanin 2, depth $\mathcal{O}(log^i(n))$.
+		\item  \textbf{$AC^i$} - The class of boolean functions that can be computed with polynomial size , unbounded fanin for both and gates and or gates , depth $\mathcal{O}(log^i(n))$.
+		\item \textbf{$SAC^i$} - The class of boolean functions that can be computed with polynomial size ,unbounded fanin for or gates and  fanin 2 for and gates , depth $\mathcal{O}(log^i(n))$.
+		\item \textbf{$NC$} - $$NC=\bigcup_{i\in \mathbb{N}} NC^i$$ 
+		\item \textbf{$AC$} - $$AC=\bigcup_{i\in \mathbb{N}} AC^i$$ 
+		\item \textbf{$SAC$} - $$SAC=\bigcup_{i\in \mathbb{N}} SAC^i$$ 
+		\item \textbf{$\# L$} - A function $f \in \# L$ if and only if there exists a $NL $ machine such that $f(x)$ counts the number of certificates which lead to acceptance in the $NL $ machine.
+		\item \textbf{$GAP-L$} - A function $h$ is in $GAP-L$ if it can be written as $f-g$ where $f$ and $g$ are in $\# L$.
+ 		\item \textbf{$SPL$} - The class of decision problems such that
+		$\exists$ a $GAP-L$ function $f$ such that -
+		\begin{itemize}
+			\item If $x\in L$ then $f(x)=1$.
+			\item If $x\notin L$ then $f(x)=0$.
+		\end{itemize} 		
+		\item \textbf{$C_{=}L$} (\textit{Exact counting in Logspace}) - It is the class of sets $A$ for which there exists a function $f\in GAP-L$ such that $$\forall x: x\in A \iff f(x)=0$$.
+		\item \textbf{$\bigoplus L$} - $\bigoplus L$ is the class of sets $A$ for which there exists a function $f \in GAP-L$ such that 
+		$$\forall x : x\in A \iff f(x)\not\equiv 0 \mod 2$$.
+		\\
+		Now we have the following relation between the classes -
+		$$L \subseteq SPL \subseteq C_{=}L \subseteq L^{C_{=}L} \subseteq NC^2 $$ $$SPL \subseteq \oplus L \subseteq NC^2  $$ $$NL \subseteq C_{=}L$$ 
+	\end{itemize}
+	
+	
+\end{frame}
+\section{Polynomially Bounded Perfect Matching Problem in $NC^2$}
+\begin{frame}[allowframebreaks]{Case of Bipartite Graphs}
+	
+		\textbf{Theorem} - \textit{All perfect matchings of a bipartite graph with polynomially bounded number of perfect matchings can be constructed in $NC^2$}.
+		\\
+		\textbf{Proof} - Let $B_m(x)=(b_{i,j}^{(m)}(x))$ 
+		where $b_{i,j}^{(m)}(x)=a_{i,j}\cdot p_{i,j}\cdot x^{m^{ni+j} \mod r}$
+		and $a_{i,j} = 1$ if and only if the $i$ th vertex of bipartition $X$ is connected to the $j$ th vertex of the bipartition $Y$. \\
+		
+		Also we have $p_{i,j}$ are pairwise distinct primes , $r$ is a prime such that $r>n^2\cdot p^2(n)$. By prime  number theorem we can choose $max\{p_{(i,j)}\mid 1 \leq i,j \leq n\}= \mathcal{O}(n^3)$.\\
+		
+		Lets denote $d_m(x)=det(B_m(x))=$ $$\sum_{\pi \in S_n} sign(\pi)(\prod_{i=1}^{n}a_{i,\pi(i)}p_{i,\pi(i)})x^{e_m(\pi)}$$
+		where $e_m(\pi) = \sum_{i=1}^{n}(m^{ni+\pi(i)}\mod r)$  .\\
+		
+		\textbf{Lemma} - \textit{Let $\pi_1,\pi_2 \cdots ,\pi_t \in S_n$ for some $t \leq p(n)$. Then there exists an $m<r$ such that $e_m(\pi_i)\neq e_m(\pi_j)$ , for all $i \neq j$ and $i,j\in [1\cdots n]$.}\\
+		
+		\textbf{Proof} - The values $e_m(\pi_i)$ can be seen as evaluations of polynomials over the field $\mathbb{Z}_r$ in the following way. Define $$q_{\pi}(z)= \sum_{i=1}^{n}z^{ni+\pi(i)}$$
+		Then we have $$e_m(\pi_i)\equiv q_{\pi_i}(m) \mod r$$
+		To prove the lemma we will use the fact that the degree of $q_{\pi_i}(z)$ is bounded by $n^2+n\leq 2n^2$. Now any two of them can agree on at most $2n^2$ points . So if the field size is larger than ${t\choose 2} 2n^2$ we have a point where all the $q_{\pi_i}$ polynomials, pairwise differ. And by our choice of $r$ we have that property as 
+		$${t\choose 2 } 2n^2 \leq t^2n^2\leq p^2(n)n^2<r$$.
+		\\
+		It follows that if $G$ has $t$ perfect matchings for some $t\leq p(n)$, then there exists an $m<r$ such that $$d_{m}(x)=\sum_{k=0}^{D}c_{k}^{(m)} x^k$$
+		where precisely $t$ of the coefficients are non zero and are of form $$c_{k}^{m}=sign(\pi)\prod_{i=1}^{n} p_{i,\pi(i)}$$
+		for some $\pi \in S_n$ such that $k=e_m(\pi)$. To compute these cooeficients we define the Vandermonde matrix $V=(v_{i,j})$ where $v_{i,j}=i^j$ for $0\leq i,j \leq D$.
+		\\
+		Define the vectors $$d_m=(d_m(0),d_m(1),\cdots d_m(D))^T$$.
+		$$c_m=(c_{0}^{(m)},c_{1}^{(m)}, \cdots, c_{D}^{(m)})$$
+		We have that $$c_m=V^{-1} d_m$$\\
+		\textbf{Lemma} - Computation of $c_m$ is in $NC^2$.
+		\\ \textbf{Proof} - The matrices $V$ and $B_m(x)$ can be computed in $NC^1$ for any $x \leq D$. Vector $d_m$ can be computed by computing the determinant of matrix $B_{m}(x)$ for different values of $x$ can be computed in $NC^2$ (Using the trace method). Also $V^{-1}$ can be computed in $NC^2$.\\
+		\textbf{Proof of main theorem} - So what we do is calculate the vectors $c_m$ for all $m<r$ then focus on the one with maximum number of nonzero entries because that value of $m$ will isolate all the perfect matchings (since we proved the existence of such a $m$) then for all non zero cooeficients we can test $c_{k}^{(m)} \equiv 0 \mod p_{ij}$.(Since $p_{i,j}$ are $\mathcal{O}(n^3)$). 
+		\\Hence we can construct all perfect matchings of $G$ in $NC^2$ .
+		\\So basically the idea is the $p_{ij}$ is used store the information of matching edges and the value $r$ is used to isolate the matchings.
+		
+		
+\end{frame}
+\begin{frame}[allowframebreaks]{Case of General Graphs }
+	\textbf{Theorem} \textit{All perfect matchings of a graph with a polynomially bounded number of perfect matchings can be constructed in $\mathbf{N C}^2$.} \\
+	
+	Let $G=(V, E)$ be an undirected graph with $|V|=n$ nodes. We assume that $n$ is even, otherwise $G$ has no perfect matchings. Let $A=\left(a_{i, j}\right)$ be the adjacency matrix of $G$. Let $p$ be a polynomial and assume that $G$ has at most $p(n)$ perfect matchings. We define matrices $B_m(x)=\left(b_{i, j}^{(m)}(x)\right)$ in a similar fashion as before. The definition is now according to the Tutte matrix of $G$ :
+	$$
+	b_{i, j}^{(m)}(x)= \begin{cases}a_{i, j} p_{i, j} x^{m^{n+j} \bmod r}, & \text { if } i \leq j, \\ -a_{j, i} p_{j, i} x^{m^{n j+i} \bmod r}, & \text { otherwise },\end{cases}
+	$$
+	for pairwise different primes $p_{i, j}$ of size $O\left(n^3\right)$, an indeterminate $x$, a prime $r$ such that $r>n^2 p^2(n)$, and $1 \leq m<r$.\\
+	The Pfaffian of $B_m(x)$ is a polynomial $p_m(x)$, where
+	$$
+	\begin{aligned}
+		p_m(x)=\operatorname{pf}\left(B_m(x)\right) & =\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot \prod_{\substack{(i, j) \in M \\
+				i<j}} a_{i, j} p_{i, j} x^{m^{n i+j} \bmod r} \\
+		& =\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot\left(\prod_{\substack{(i, j) \in M \\
+				i<j}} a_{i, j} p_{i, j}\right) x^{e_m(M)}
+	\end{aligned}
+	$$
+	where
+	$$
+	e_m(M)=\sum_{\substack{(i, j) \in M \\ i<j}}\left(m^{n i+j} \bmod r\right)
+	$$
+	are the exponents of $x$ in $p_m(x)$. Similar as in Lemma 1 we have that there is some $m<r$ where the exponents $e_m(M)$ pairwise differ.
+	Note that $e_m(M) \leq(r-1) n / 2$. Let $D=(r-1) n / 2$. Then we can write
+	$$
+	p_m(x)=\sum_{k=0}^D c_k^{(m)} x^k
+	$$
+	
+	Define the Vandermonde matrix $V=\left(v_{i, j}\right)$ by $v_{i, j}=i^j$, for $0 \leq i, j \leq D$. Define vectors
+	$$
+	\begin{aligned}
+		\boldsymbol{p}_m & =\left(\begin{array}{llll}
+			p_m(0) & p_m(1) & \cdots & p_m(D)
+		\end{array}\right)^T \\
+		\boldsymbol{c}_m & =\left(\begin{array}{llll}
+			c_0^{(m)} & c_1^{(m)} & \cdots & c_D^{(m)}
+		\end{array}\right)^T
+	\end{aligned}
+	$$
+	
+	As in the bipartite case we have $\boldsymbol{p}_m=V \cdot \boldsymbol{c}_m$, from which we get $\boldsymbol{c}_m=V^{-1} \boldsymbol{p}_m$. Similar to the previous case $ \boldsymbol{c}_m$ can be computed in $\mathbf{N C}^2$.
+	\\
+	This is because of the result that calculation of integeral Pffafian is in $GAP-L$ (\textit{Mahajan and Vinay 99}) and the fact that integer Determinant is $GAP-L$ complete and can be calculated in $NC^2$.
+\end{frame}
+\begin{frame}[allowframebreaks]{Case of Weighted Graphs}
+	\textbf{Theorem}- \textit{Let $G$ be a weighted graph with polynomially bounded weights such that $G$ has a polynomially bounded number of perfect matchings of some weight $w$. Then all perfect matchings of $G$ of weight $w$ can be constructed in $\mathbf{N C}^2$.} \\
+	\textbf{Proof}- 
+	Define matrices $B_m(x, y)=\left(b_{i, j}^{(m)}(x, y)\right)$ in two variables $x$ and $y$ that incorporate the weights of $G$ :
+	$$
+	b_{i, j}^{(m)}(x, y)= \begin{cases}a_{i, j} p_{i, j} y^{w_{i, j}} x^{m^{n i+j} \bmod r}, & \text { if } i \leq j, \\ -a_{j, i} p_{j, i} y^{w_{j, i}} x^{m^{n j+i}} \bmod r & \text { otherwise, }\end{cases}
+	$$
+	for pairwise different primes $p_{i, j}$ of size $O\left(n^3\right)$, indeterminates $x$ and $y$, a prime $r$ such that $r>n^2 p^2(n)$, and $1 \leq m<r$.
+	The Pfaffian of $B_m(x, y)$ is a polynomial $p_m(x, y)$, where $$p_m(x, y)=\operatorname{pf}\left(B_m(x, y)\right) $$
+	$$
+	\begin{aligned}
+		\\ =\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot \prod_{\substack{(i, j) \in M \\
+				i<j}} a_{i, j} p_{i, j} y^{w_{i, j}} x^{m^{n i+j} \bmod r} \\
+		\\ =\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot\left(\prod_{\substack{(i, j) \in M \\
+				i<j}} a_{i, j} p_{i, j}\right) y^{w(M)} x^{e_m(M)}
+	\end{aligned}
+	$$
+	where $e_m(M)=\sum_{(i, j) \in M,i<j}\left(m^{n i+j} \bmod r\right)$. By a similar argument as in previous lemma 
+	we have that there is some $m<r$ where the exponents $e_m(M)$ pairwise differ, and this suffices for our purpose.
+	
+	The degree of $x$ in $p_m(x, y)$ is bounded by $(r-1) n / 2$. Let $d=(r-1) n / 2+1$, so that the degree of $x$ in $p_m(x, y)$ is strictly less than $d$. We transform $p_m(x, y)$ into polynomial $P_m(x)$ with just one variable by setting
+	$$
+	P_m(x)=p_m\left(x, x^d\right) .
+	$$
+	
+	Then we have
+	$$
+	P_m(x)=\sum_{M \in P M(G)} \operatorname{sign}(M) \cdot\left(\prod_{\substack{(i, j) \in M \\ i<j}} a_{i, j} p_{i, j}\right) x^{d w(M)+e_m(M)}
+	$$
+	
+	By our choice of $d$ we have $d>e_m(M)$. Let $w$ be any fixed weight and consider a perfect matching $M$ of weight $w$. Then we have
+	$$
+	d w<d w+e_m(M)<d(w+1) .
+	$$
+	
+	That is, the degrees of $x$ in $P_m(x)$ for perfect matchings of different weights $w$ are in disjoint intervals of the form $(d w, d(w+1))$. Let $D$ be the degree of $P_m(x)$.
+	
+	We have $D \leq d (w_{\max }+1)$, where $w_{\max }$ is the maximum weight of any matching. Note that $w_{\max } \leq \max \left\{w_{i, j} \mid 1 \leq i, j \leq n\right\} n / 2$. Let
+	$$
+	P_m(x)=\sum_{k=0}^D c_k^{(m)} x^k .
+	$$
+	
+	We have seen earlier how to determine the coefficients $c_k^{(m)}$ and how to get the perfect matchings from these coefficients in $NC^2$.(Using interpolation). Note that the perfect matchings of weight $w$ are represented by the coefficients $c_k^{(m)}$ for $d w<k<$ $d(w+1)$.
+	
+	Now, if there are at most $p(n)$ perfect matchings of weight $w$, then all of these will be listed by our $NC^2$-circuit. Note however that we might list perfect matchings of other weights as well. In case that the promise is for the minimum (or maximum) weight perfect matching, we may discard non-optimal perfect matchings.
+\end{frame}
+\section{On the Matching Problem for Special Graphs}
+\begin{frame}[allowframebreaks]{Perfect matching construction in $L^{C_=L} \cap \oplus L$}
+	\textbf{Lemma} - \textit{Given a graph $G$ and a weight function on the edges of the graph $G$.If all the nice cycles in the graph $G$ have a non vanishing circulation then there exist a unique min-weight matching for the graph $G$ and the given weight function. } \break \break
+	\textbf{Isolating Lemma -} \textit{Let $U$ be a universe of size $m$ and $F$ be a family of subsets of $U$ . Let $w: U \to \{1,2,\cdots,M\}$ be weighting function. Then if we select weight functions uniformly at random then we have that the probability of getting a unique minimum subset in $F$ is} $$\geq 1-\frac{m}{M}$$
+	\break
+	\textbf{Lemma}- \textit{ Let $G=(V, E)$ be an undirected graph with $|V|=n$ vertices and $m$ edges $E=$ $\left\{e_1, e_2, \ldots, e_m\right\}$, and let the number of nice cycles in $G$ be at most $n^k$, for some positive constant $k$. Then there exists a prime number $p<2 n^k(m+1)$ such that the weight function $w_p: E \mapsto \mathbb{Z}_p$ where $w_p\left(e_i\right)=2^i \bmod p$ is admissible (A weight function is admissible if and only if all the nice cycles have non-vanishing circulations) for $G$.}
+	
+	\textbf{Proof:} Assign $2^i$ to every edge $e_i$ in $G$. Then each nice cycle $C$ in $G$ has a nonzero circulation because two perfect matchings defined in $C$ have different weights. Consider the product of all the circulations:
+	$$
+	Q=\prod_{C \text { is a nice cycle }} \text { circulation }(C) .
+	$$
+	Since the number of nice cycles in $G$ is at most $n^k$ and since $0<$ circulation $(C)<2^{m+1}$ (because the  most significant edge will dominate ) holds for every nice cycle $C$, we get $0<Q<2^{n^k(m+1)}$. It is well-known from Number Theory that
+	$$
+	\prod_{ primes \hspace{0.1cm} p_i \leq 2 N} p_i>2^N \text {, for all } N>2 \text {. }
+	$$
+	
+	Therefore, there exists a prime $p<2 n^k(m+1)$ such that $p$ is not a factor of $Q$, i.e. we have $Q \bmod p \neq 0$, or equivalently:
+	$$
+	\operatorname{circulation}(C) \bmod p \neq 0
+	$$
+	for all nice cycles $C$ in $G$. Hence by Lemma 3.1 a minimum weight perfect matching becomes unique under the weight function $w_p: E \rightarrow \mathbb{Z}_p$ where
+	$$
+	w_p\left(e_i\right)=2^i \bmod p, \text { for } i=1,2, \ldots, m \text {. }
+	$$
+	
+	Note that all the prime numbers $q<2 n^k(m+1)$ and the weight functions $w_q$ are computable in logspace. This completes the proof of the lemma.
+	\\
+	\break
+	Also notice if the graph has polynomially bounded perfect matchings then it also has polynomially bounded nice cycles (more precisely number of nice cycles is upperbounded by the square of number of perfect matchings because each nice cycle can be associated a pair of perfect matchings such that their symmetric differnce is that nice cycle.)
+	
+	\break
+	\textbf{Theorem} - \textit{For each fixed $k>0$, there is a GapL-function $h_k$ such that on input a graph $G$ with at most $n^k$ nice cycles (where $n$ is the number of vertices in $G), h_k(G)=1$ if $G$ has a perfect matching, and $h_k(G)=0$ if $G$ has no perfect matching. Furthermore, a perfect matching in $G$, if one exists, can be constructed in $\mathbf{L}^{\mathbf{C}_= \mathbf{L}} \cap \oplus \mathbf{L}$.}
+	
+	\textbf{Proof:} Let $G=(V, E)$ be a graph with $n$ vertices, $m$ edges $E=\left\{e_1, \ldots, e_m\right\}$, and with at most $n^k$ nice cycles, for some positive constant $k$. Let $U$ be the set of all prime numbers smaller or equal to $2 n^k(m+1)$. Define the weight functions $w_p: E \rightarrow \mathbb{Z}_p$, for each $p \in U$, where $w_p\left(e_i\right)=2^i \bmod p$ for every edge $e_i$.
+	
+	Let $x$ be an indeterminate. Assign $x^{w_p(e)}$ to each edge $e$ in $G$ to get the graphs $G_p(x)$, for every $p \in$ $U$. By $G_p^{(-e)}(x)$ we denote the result of deleting edge $e$ from $G_p(x)$. The canonical Tutte skew-symmetric matrices of $G_p(x)$ and $G_p^{(-e)}$ we denote respectively by $T_p(x)$ and by $T_p^{(-e)}(x)$.
+	
+	Considering the Pfaffian polynomials of these matrices we observe that the value of a perfect matching $M$ becomes $x^{W(M)}$ where $W(M)$ is the weight of $M$, the coefficient of $x^{W(M)}$ in the polynomial is the sum of all signs of all perfect matchings having the same weight $W(M)$. Define $K=n^{k+1}(m+1)$. Obviously, all primes from $U$ are at most $K$, for every $n \geq 2$. Now we can write:
+	$$
+	\begin{aligned}
+		\operatorname{pf}\left(T_p(x)\right) & =c_{p, 0}+c_{p, 1} x^1+\cdots+c_{p, K} x^K \\
+		\operatorname{pf}\left(T_p^{(-e)}(x)\right) & =c_{p, 0}^{(-e)}+c_{p, 1}^{(-e)} x^1+\cdots+c_{p, K}^{(-e)} x^K
+	\end{aligned}
+	$$
+	
+	It is clear that all $\operatorname{pf}\left(T_p(x)\right)$ and $\operatorname{pf}\left(T_p^{(-e)}(x)\right)$ vanish if $G$ has no perfect matching.
+	
+	Consider the case when $G$ has some perfect matching. By previous lemma there exists some $p \in U$ such that the graph $G$ under $w_p$ has a unique minimum weight perfect matching. Let $M_0$ be this unique matching and let $I$ be its weight under $w_p$. Observe that the coefficient of $x^I$ in $\operatorname{pf}\left(T_p(x)\right)$, occurred as the lowest nonzero coefficient in the polynomial, should be
+	$$
+	c_{p, I}=\operatorname{sign}\left(M_0\right) \in\{+1,-1\},
+	$$
+	or equivalently $c_{p, I}^2=1$. We know that all the coefficients of the polynomials we consider are computable in $GAP-L$ because of the following lemma.\\
+	\textbf{Lemma} - Given $A(x)$ to be a polynomial matrix with entries having logrithmic bit length in degree(basically polynomially bounded degree) then the coefficients of $det(A(x))$ are computable in $GAP-L$.
+	\\
+	Using the above lemma and the fact that $pf(A(x))$ for skew symmetric $A(x)$ is $GAP-L$ computable [Mahajan and Vinay 99] we get that coefficients can also be computed in $GAP-L$.\\
+	 Hence we get that $$h_k(G)= 1 - \prod_{0\leq i \leq K, p \in U} (1-c^{2}_{p,i})$$
+	is a \textit{zero-one-valued} $GAP-L$ function such that $h_k(G)=1$ if and only if $G$ has some perfect matching.
+	It remains to show that we can construct a perfect matching of $G$ in $\mathbf{L}^{\mathbf{C}_{=} \mathbf{L}} \cap \oplus \mathbf{L}$.
+	
+	Observe that if $w_p$ is admissible for $G$, then $G$ has the unique minimum weight perfect matching $M_0$ with weight $0 \leq I \leq K$. Thus we have
+	$$
+	c_{p, I}^2=1 \text { and } c_{p, I}^{(-e)}=\left\{\begin{array}{cl}
+		0, & \text { if } e \in M_0 \\
+		c_{p, I}, & \text { otherwise. }
+	\end{array}\right.
+	$$
+	
+	Therefore, in $\mathbf{C}_{=} \mathbf{L}$ we can construct all edge-sets $M_{p, i}$ as follows:
+	$$
+	e \in M_{p, i} \text { iff } c_{p, i}^2=1 \text { and } c_{p, i}^{(-e)}=0
+	$$
+	for each edge $e$, for all $p \in U$ and $0 \leq i \leq K$.
+	It is easy to see that the same edge-sets will be constructed by the same procedure in $\mathbb{Z}_2$, i.e. in $\oplus \mathbf{L}$ we can construct all the sets $M_{p, i}$. After that we can easily determine and output in logspace all perfect matchings from the constructed edge-sets $M_{p, i}$. Note that at least one edge-set, namely $M_{p, I}$ from our construction, is indeed a perfect matching in $G$. Our construction is in $\mathbf{L}^{\mathbf{C}=\mathbf{L}} \cap \oplus \mathbf{L}$ because $\mathbf{L}^{\oplus \mathbf{L}}=\oplus \mathbf{L}$. This completes the proof of the theorem.
+	
+\end{frame}
+\begin{frame}[allowframebreaks]{Poly Bounded Perfect Matching Search in $C_=L \cap \oplus L$}
+	\textbf{Theorem} - \textit{For graphs with polynomially bounded number of perfect matchings we have that  $SEARCH-PM$ is in $C_=L \cap \oplus L$ and $COUNTING-PM$ is in $C_=L$} .\\
+	\textbf{Proof} - Let $G=(V, E)$ be an undirected graph with $n$ vertices, $m$ edges $|E|=\left\{e_1, \ldots, e_m\right\}$, and with at most $n^k$ perfect matchings, for a fixed $k>0$. We show how to construct all perfect matchings in $G$. Our construction consists of two steps as follows:
+	(a) compute a prime $p$ such that the function
+	$$
+	w_p: w_p\left(e_i\right)=2^i \bmod p
+	$$
+	isolates all perfect matchings in $G$\\
+	(b) construct all perfect matchings from the Pfaffian polynomials.
+	
+	Consider Step (a). Let's call a prime $p$ from Step (a) "right" if $w_p$ isolates all perfect matchings in $G$. Observe that under the function $w: w\left(e_i\right)=2^i$, the weights of all perfect matchings are pairwise different, i.e. we have
+	$$
+	0<|W(M)-W(N)|<2^{m+1}
+	$$
+	where $W(M)$ and $W(N)$ are the weights of perfect matching $M$ and $N$, respectively. Therefore, we have the following estimation
+	$$
+	\begin{aligned}
+		0<Q & =\prod_{\text {all } M \neq N}|W(M)-W(N)| \\
+		& <2^{(m+1)\left(\begin{array}{c}
+				n^k \\
+				2
+			\end{array}\right)} \\
+		& <2^{\frac{1}{2}(m+1) n^{2 k}} .
+	\end{aligned}
+	$$
+	
+	In analogy to previous lemma, define $U$ as the set of all prime numbers smaller or equal to $(m+1) n^{2 k}$. Then there exists a prime $p \in U$ such that $Q \bmod p \neq 0$, i.e. the weight function $w_p$ defined on such a prime $p$ isolates all perfect matchings in $G$. Define $K=(m+$ 1) $n^{2 k}$. Then $K$ is bigger than every prime from $U$. Therefore, $K$ is also an upper bound on the degrees of the polynomial $\operatorname{pf}\left(T_p(x)\right)$, i.e. we can write
+	$$
+	\operatorname{pf}\left(T_p(x)\right)=c_{p, 0}+c_{p, 1} x^1+\cdots+c_{p, K} x^K .
+	$$
+	
+	We observe further that a prime $p \in U$ is "right" iff in $\operatorname{pf}\left(T_p(x)\right)$ all coefficients are from $\{-1,0,+1\}$ and the number of nonzero coefficients is maximum. Note that the latter is the number of all perfect matchings in $G$ when $p$ is "right", i.e. for the "right" prime $p$, the GapL-function
+	$$
+	g_p=\sum_{i=0}^K c_{p, i}^2
+	$$
+	computes the number of all perfect matchings in $G$. Note that if prime $p \in U$ is not "right" then anyhow we have $0 \leq c_{p, i}^2 \leq n^{2 k}$ and $0 \leq g_p \leq K n^{2 k}$, for every $0 \leq i \leq K$ and $p \in U$.
+	Define
+	$$
+	h_q=\sum_{i=0}^K\left(c_{q, i}^2-1\right) c_{q, i}^2
+	$$
+	for every $q \in U$. We see that $h_p=0$ if and only if all the coefficients in $pf(T_p(x))$ are from $\{+1,0,-1\}$. Moreover for each 
+	$0 \leq i \leq K$ and for each $q \in U$, we have
+	$$
+	0 \leq\left(c_{q, i}^2-1\right) c_{q, i}^2<n^{4 k}
+	$$
+	since the number of perfect matchings in $G$ is at most $n^k$. Hence $0 \leq h_q<K n^{4 k}$ holds for every $q \in U$.
+	
+	Finally, in order to determine the "right" prime $p$ we define the following GapL-functions
+	$$
+	H_{q, q^{\prime}}=\prod_{a=1}^{K n^{4 k}}\left(h_{q^{\prime}}-a\right) \prod_{a=0}^{K n^{2 k}}\left(g_q-g_{q^{\prime}}-a\right),
+	$$
+	for each pair of primes $q$ and $q^{\prime}$ from $U$. Then it is easy to see that
+	$$
+	H_{q, q^{\prime}}=0 \text { iff } h_{q^{\prime}} \neq 0 \text { or } g_q>g_{q^{\prime}},
+	$$
+	where $a$ is some nonnegative integer smaller or equal to $K n^{2 k}$. Moreover, in the case when $H_{q, q^{\prime}}=0$ we get $g_q>g_{q^{\prime}}$ as long as $h_{q^{\prime}}=0$. Therefore, in $\mathbf{C}_{=} \mathbf{L}$ we can select a "right" prime $p$ from $U$ as follows:
+	$$
+	p \text { is "right" iff } h_p=0 \text { and } H_{p, q}=0,
+	$$
+	for all $p \neq q \in U$. Note that $\mathbf{C}_{=} \mathbf{L}$ is closed under intersection and union.
+	
+	Consider Step (b). In $\mathbf{C}_{=} \mathbf{L}$ we can construct the edge-sets $M_{p, i}$ corresponding to $c_{p, i} \in\{-1,+1\}$ in $\operatorname{pf}\left(T_p(x)\right)$ as stated in the proof of previous theorem. Note that after Step (b) we do not check again whether the constructed edge-sets are perfect matchings. This shows that all perfect matchings in $G$ can be constructed in $\mathbf{C}_{=} \mathbf{L}$.
+	
+	The problem SEARCH-PM is in $\oplus \mathbf{L}$ by following the proof of previous theorem.
+	
+	The number of all perfect matchings in $G$ can be computed in $\mathbf{C}_{=} \mathbf{L}$ by verifying $g_p=a$, for some $a \leq$ $n^k$, and by testing if $p$ from $U$ is "right".
+	This completes the proof of the theorem.
+	
+	
+\end{frame}
+\begin{frame}[allowframebreaks]{Isolating and Computing Maximum Matching}
+	Given a weight function $w$ that assigns
+	logarithmic bit long positive integers to the edges of a
+	graph $G$ such that the weight of a maximum matching
+	in $G$ becomes unique, the problem of computing a maximum matching in $G$ is $\mathbf{L}^{\mathbf{C}_{=}\mathbf{L}} $-reducible to the problem of computing a perfect matching in a subgraph of $G$.
+	
+	Proof: Let $G=(V, E)$ be a graph with $n$ vertices and $m$ edges. Let $M$ be a maximum matching of $G$, and let $|M|=l$ for some positive integer $l$. Suppose the weight of $M$ is unique under the weight function $w$. By $G_M$ we denote the subgraph of $G$, obtained by deleting $n-2 l$ vertices which are not covered by $M$.
+	
+	Observe that the maximum matching $M$ in $G$ becomes perfect and unique in $G_M$ under the weight function $w$. Therefore, the computation of $M$ can be done by computing $G_M$ and then by extracting a perfect matching in $G_M$.
+	
+	Let $x$ be an indeterminate. By $G(x)$ we denote the graph $G$ by assigning $x^{w(e)}$ to every edge $e$ of $G$. By this weighting scheme we obtain $G_M(x)$ from $G_M$. Let $T_G(x)$ and $T_{G_M}(x)$ be the canonical Tutte skewsymmetric matrix of $G(x)$ and of $G_M(x)$, respectively.
+	
+	Since in $G_M$ the weight of the perfect matching $M$ is unique under $w$, the Pfaffian polynomial $\operatorname{pf}\left(T_{G_M}(x)\right)$ should be nonzero and the order of $T_{G_M}(x)$ should be $2 l$. Hence we have
+	$$
+	\begin{gathered}
+		\operatorname{det}\left(T_{G_M}(x)\right)=\operatorname{pf}^2\left(T_{G_M}(x)\right) \neq 0, \text { and } \\
+		\operatorname{rank}\left(T_{G_M}(x)\right)=2 l .
+	\end{gathered}
+	$$
+	
+	Moreover, since $l$ is maximum, $T_{G_M}(x)$ is a maximum size nonsingular sub-matrix of the polynomial skewsymmetric $T_G(x)$. As a consequence we get
+	$$
+	\operatorname{rank}\left(T_G(x)\right)=\operatorname{rank}\left(T_{G_M}(x)\right)=2 l .
+	$$
+	
+	Conversely, consider an $n$-bit vector $\vec{b}$ associated to a maximal set of linearly independent columns of $T_G(x)$. We call vector $\vec{b}$ a column-basis of $T_G(x)$. Observe that the subgraph $G_{\vec{b}}$ of $G$ that contains all vertices $i$ of $G$ such that $\vec{b}_i=1$ has always perfect matchings of the size $l$, and these matchings are maximum in $G$. Thus, in order to compute a subgraph having a perfect matching which is a maximum matching in $G$ we can compute a column-basis of $T_G(x)$.
+	
+	The problem of computing a column-basis of an integer matrix  is reducible to the rank of an integer matrix. The latter is known to be in $\mathbf{L}^{\mathbf{C}_{=} \mathbf{L}}$ . It is not hard to show that, for polynomial matrices, $i$ the problem of computing a columnbasis is also in $\mathbf{L}^{\mathbf{C}=} \mathbf{L}$. Our proof of this statement consists of two following parts: a) the problem of 
+	computing a column-basis is reducible to the problem of computing the rank and b) the rank can be computed in $L^{C_=L}$.
+	a) Given is an $n \times n$ univariate polynomial matrix $A(x)$ where the degrees of its elements are at most $n^c$, for some positive constant $c$. Let $\vec{a}_1(x), \ldots, \vec{a}_n(x)$ be its columns. One has to compute a column-basis of $A(x)$.
+	Let $A_i(x)$ be the matrix formed by the first $i$ columns $\vec{a}_1(x), \ldots, \vec{a}_i(x)$ of $A(x)$, for all $1 \leq$ $i \leq n$. It is well known from linear algebra that a column-basis can be selected as the collection of all $\vec{a}_i(x)$ where
+	$$
+	\operatorname{rank}\left(A_{i-1}(x)\right)+1=\operatorname{rank}\left(A_i(x)\right),
+	$$
+	for every $1 \leq i \leq n$. Therefore, the computation of a column-basis is reduced to the problem of computing the rank of a polynomial matrix.
+	b) Given is an $n \times m$ univariate polynomial matrix $B(x)$, where the degrees of the matrix-elements are at most $n^c$, for some positive constant $c$. One has to compute $\operatorname{rank}(B(x))$.
+	It is known that $2 \operatorname{rank}(B(x))=\operatorname{rank}(C(x))$ where
+	$$
+	C(x)=\left(\begin{array}{cc}
+		\mathbf{0} & B(x) \\
+		B^t(x) & \mathbf{0}
+	\end{array}\right)
+	$$
+	and $B^t(x)$ is the transpose of $B(x)$. Since $C(x)$ is an $N \times N$ symmetric matrix, where $N=m+n$, we can compute $\operatorname{rank}(C(x))$ by the characteristic polynomial
+	$$
+	\chi_C(x)=\operatorname{det}(y I-C(x)),
+	$$
+	where $y$ is an indeterminate, as follows: Let
+	$$
+	\chi_C(x)=y^N+p_{N-1}(x) y^{N-1}+\cdots+p_0(x),
+	$$
+	where $p_i(x)$ is a polynomial in $x$. Then for some $0 \leq j \leq N$ we have $\operatorname{rank}(C(x))=j$ iff
+	$$
+	p_0(x)=\cdots=p_{N-j-1}(x)=0 \text { and } p_{N-j}(x) \neq 0 \text {. }
+	$$
+	
+	Consider one of the polynomials $p_i(x)$. If $p_i(x)=$ 0 then it is clear that $p_i(a)=0$ for all $a$ 's. Otherwise, if $p_i(x) \neq 0$ then there exists an integer $a \in S=\left\{0,1, \ldots, \operatorname{deg}\left(p_i(x)\right)\right\}$ such that $p_i(a) \neq 0$ because of the fact that $p_i(x)$ has at $\operatorname{most} \operatorname{deg}\left(p_i(x)\right)$ real roots. Since
+	$$
+	\operatorname{deg}\left(p_i(x)\right) \leq N n^c=(m+n) n^c,
+	$$
+	for all $0 \leq i \leq N-1$, where $c$ is a constant, we define
+	$$
+	S=\left\{0,1, \ldots,(m+n) n^c\right\} .
+	$$
+	
+	Then the rank of $B(x)$ is equal to the maximum number in the set $\{\operatorname{rank}(B(a)) \mid a \in S\}$.
+	
+	The rank of an integer matrix is known to be in $\mathbf{L}^{\mathbf{C}=\mathbf{L}}$ . Therefore, $\operatorname{rank}(B(x))$ is in $\mathbf{L}^{\mathbf{C}_{=} \mathbf{L}}$.
+	
+	The proof of the lemma is complete.
+	
+\end{frame}
+\section{Planar Maximum Matching : Towards a Parallel Algorithm}
+\begin{frame}[allowframebreaks]{Maximum Matching Search in Graphs with NVC}
+	We will show that given an undirected unweighted graph $G = (V, E)$ admitting
+	non-zero circulations, finding a maximum matching is in $SPL$. The basic idea is to construct
+	an auxiliary graph $G'$ having the property that finding a maximum matching in $G$ reduces
+	to finding a min-weight generalized perfect matching (defined later) in $G'$. Assign non-zero
+	circulation weights to the edges in $G'$ which are also isolating weights for matchings. Then
+	we extract a min-weight generalized perfect matching from $G'$ which in turn extracts a
+	maximum matching from $G$.
+	\\
+	Note we assume that $NVC$ of planar graphs can be computed .
+	\\
+	We construct a graph $G^{\prime}=\left(V^{\prime}, E^{\prime}\right)$ from $G$ by adding vertex $t_v$ with a self loop for each vertex $v \in V$ and join $v$ and $t_v$ using an undirected edge, as shown in Figure 1. Thus, $\left|V^{\prime}\right|=2 n \equiv 0(\bmod 2)$.  Define a weight function $w^{\prime}: E^{\prime} \mapsto\{0,1\}$ for $G^{\prime}$ as follows. The original edges of $G$ have weight 1 , the self-loops are of weight zero and rest of the new edges have weight 1 (suffices to pick any weight $>1 / 2$ ). We define a generalized matching as a set of disjoint edges (possibly) inclusive of self-loops. Various notions for matching naturally extends to generalized matchings. Call a generalized matching as perfect wherein every vertex is matched and as min-weight perfect if it is perfect and of minimum weight.\break \break
+	\textbf{Lemma} - \textit{Any matching  $M$ in $G$ can be extended to a generalized perfect matching in $G'$. Such that $w'(P)=n-|M|$}
+	\\
+	\textbf{Proof} The proof is as follows -
+	\begin{itemize}
+		\item Keep all the matching edges of $M$ as it  is in $P$.
+		\item For all the matched  vertices $v$ match $t_v$ using self loops in $P$.
+		\item For all unmatched vertices $v$ in $M$ join $v$ with $t_v$ using the introduced edge .
+		\item Now see that the weight of $P$ is same as $|M|$ from previous matching edges and  the non self loop edges have the total weight equal to $n-2|M|$ so we get that the total weight is $n-|M|$.
+	\end{itemize}\break
+   \textbf{Observe !-} \textit{The min weight perfect matching in $G'$ corresponds to the maximum matching in $G$.}\break
+   
+   \textbf{Lemma} \textit{With respect to the weight function $w: E^{\prime} \mapsto[\mathbb{N}]$, the min-weight generalized perfect matching in $G^{\prime}$ is unique.}
+   
+   \textbf{Proof}- To prove this we need some definitions first. \begin{itemize}
+   	
+   \item Define a loop-path as a trail $\left(e_0, e_1, e_2, \ldots\right.$, $e_k$ ) (for $k$ odd, $k>1$ ) where $e_0$ is a self loop, the subtrail $\left(e_1, e_2, \ldots e_{k-1}\right)$ is a path of non-zero length and $e_k$ is also a self loop.
+   \item Define a 2-cycle as a length 2 directed cycle corresponding to an undirected edge as the underlying graph.\item Define a 2-self loop as a closed walk $(e, e)$ where $e$ is a self loop.\item  Define the alternating weight of a loop-path $\mathcal{P}^{\prime}=\left(e_0, e_1, e_2, \ldots, e_k\right)$ (for $\left.k \geq 2\right)$ to be the alternating sum of the weight of the edges in $\mathcal{P}^{\prime}$ i.e. $A W\left(\mathcal{P}^{\prime}\right)=\sum_{i=0}^k(-1)^i w\left(e_i\right)=\left(w\left(e_0\right)-w\left(e_k\right)\right)+\left(-w\left(e_1\right)+w\left(e_2\right)-\ldots+w\left(e_{k-1}\right)\right)$.
+   
+   \item Let the graph $G^{\prime}$ has at most $c^{\prime} n$ many edges for some constant $c^{\prime}$. Define a weight function $w^{\prime \prime}$ on the edges of $G^{\prime}$ which assigns non-zero weights to the self-loops as follows,
+   $$
+   w^{\prime \prime}(e)=\left\{\begin{array}{lr}
+   	i c^{\prime}, & \text { if } e=\left(t_i, t_i\right) 1 \leq i \leq|V| \\
+   	0 & \text { otherwise }
+   \end{array}\right\}
+   $$
+\end{itemize}
+\break
+Since for planar graphs we can compute $NVC$ efficiently so we take this $NVC$ and
+denote this non vanishing circulation weight for an edge $e$ by $w^{\prime \prime \prime}(e)$ which are bounded by, say $n^c$ for some constant $c$. We combine the weights $w^{\prime \prime}$ and $w^{\prime \prime \prime}$ into a single weight $w^*$. Using bit shift, we define the new weight $w^*(e)$ on the edges of $G^{\prime}$ by $w^*(e)=w^{\prime \prime}(e) \cdot 2^{\left\lceil(c+1) \log _2(n)\right\rceil}+$ $w^{\prime \prime \prime}(e)$ for $e \in E(G)$. The weights $w^*(e)$ are bounded by $w^{\prime \prime}(e) \cdot n^{c+1} \leq c^{\prime} n \cdot n^{c+1} \leq c^{\prime} n^{c+2}$. Notice that for the non self-loop edges $w^*(e)$ is bounded by $w^{\prime \prime \prime}(e) \leq n^c$.
+\break\break
+\textbf{Lemma}- \textit{With respect to the weighting scheme $w*$ , the alternating sum of each simple alternating cycle of $G'$ and each loop-path is non-zero.}
+Proof. Using the weights $w^{\prime \prime \prime}(e)$ from Lemma 10, each simple alternating cycle of $G$ has non-zero circulation, and since each simple cycle of $G^{\prime}$ is necessarily a simple cycle in $G$, thus every simple alternating cycle of $G^{\prime}$ has non-zero circulation. Now consider the looppath given by $\mathcal{P}=\left(e_0, e_1, e_2, \ldots e_k\right)$ (for $\left.k \geq 2\right)$. Then, $|A W(\mathcal{P})|=\left|\sum_{i=0}^k(-1)^i w^*\left(e_k\right)\right| \geq$ $\left|w^*\left(e_0\right)-w^*\left(e_k\right)\right|-\left|\left(w^*\left(e_1\right)-w^*\left(e_2\right)+\ldots+(-1)^k w^*\left(e_{k-1}\right)\right)\right|$. And,
+$$
+\begin{aligned}
+	\left|\left(w^*\left(e_1\right)-w^*\left(e_2\right)+\ldots+(-1)^k w^*\left(e_{k-1}\right)\right)\right| \\ <\left|w^*\left(e_1\right)\right|+\left|w^*\left(e_2\right)\right|+\ldots+\left|w^*\left(e_{k-1}\right)\right| \\
+	\\ <(k-1) \cdot n^c \quad\left(\text { as } w^*\left(e_i\right) \leq n^c \text { here }\right) \\
+	\\ <\left(c^{\prime} n-1\right) \cdot n^c \quad\left(k<\left|E\left(G^{\prime}\right)\right| \leq c^{\prime} n\right) \\
+	 \leq c^{\prime} n^{c+1}
+\end{aligned}
+$$
+
+Then $|A W(\mathcal{P})|>\left|w^*\left(e_0\right)-w^*\left(e_k\right)\right|-c^{\prime} n^{c+1} \geq 0$ and thus every loop-path also has non-zero alternating weight.
+
+Now we combine the weights $w^{\prime}$ and $w^*$ into a single weight $w$. Using bit shift again, we define the new weight $w(e)$ on the edges of $G^{\prime}$ as $w(e)=w^{\prime}(e) \cdot 2^{\left\lceil(c+2) \log _2\left(c^{\prime} n\right)\right\rceil}+w^*(e)$ for $e \in E(G)$. The weights $w(e)$ are bounded by $w^{\prime}(e) \cdot c^{\prime} n^{c+2} \leq c^{\prime} n^{c+2}$ as $w^{\prime}(e) \in\{0,1\}$.
+\break
+Now we will summarize the weighting scheme -
+\begin{itemize}
+	\item First we  defined $w'$ on $G'$ as 
+		\begin{equation}
+		w'(e) = \begin{cases}
+			1 & e\in G\\
+			0 & e=(t_v,t_v)\\
+			1 & e=(v,t_v)\\
+		\end{cases}
+		\end{equation}
+	\item Then we defined $w''$ on $G'$ as
+		\begin{equation}
+			w''(e) = \begin{cases}
+				ic' & e=(t_v,t_v)\\
+				0 & otherwise\\
+			\end{cases}
+		\end{equation}
+	\item Then we defined $w'''$ on $G$ which is just the non vanishing circulation weights on $G$. We trivially extend $w'''$ to $G'$ as the edges which are not in $G$ we added $0$ weight to them.\\
+	\item Then we defined $w^{*}$ as $w^{*}(e)=w''(e)\cdot 2^{\lceil (c+1) \log_2(n)\rceil}+w'''(e)$
+	\item Then we defined the weight scheme $w(e) $ as $w(e)= w^{*}(e)+w'(e)^{\lceil (c+2)\log_2(c'n)\rceil}$	
+	
+\end{itemize}
+\break
+
+\textbf{Lemma} \textit{A min-weight generalized perfect matching of $G^{\prime}$ corresponding to the weight function $w^{\prime}$ is also a min-weight generalized perfect matching corresponding to the weight function $w$. Moreover, the alternating sum of the weights with respect to $w$ of simple alternating cycles and loop-paths are non-zero.}
+\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \textbf{Proof of main lemma (unique min weight perfect matching)} The components of the symmetric difference of any two generalized perfect matchings are either simple alternating cycles, loop-paths, 2-cycles or 2-self-loops. Suppose that there is more than one min-weight generalized perfect matching of $G^{\prime}$, call them $P_1$ and $P_2$, such that $P_1 \neq P_2$. Since $P_1 \neq P_2$, there exists atleast one component of $P_1 \cup P_2$ which is a simple alternating cycle or an loop-path. And since $w^{\prime \prime}(e)$ assigns a non-zero alternating sum weight on all simple alternating cycle and loop-paths, this implies that the sum of weights of edges from one of $P_1$ and $P_2$ is lesser than the other. Swapping the edges between $P_1$ and $P_2$ in this component will give rise to a new generalized perfect matching having weight lower than both of $P_1$ and $P_2$, which is a contradiction.
+
+We use the determinant polynomial to compute the size of the maximum matching.
+Since we can get the least coefficient and take the square root of it to get the coefficient of it in the pfaffian.(Since the least degree in the determinant will be just  the square of the term in pfaffian since the min weight thing is unique .)
+Now we compute the least degree term in determinant polynomial. Once the weight is known extract $P$ the perfect matching by deleting edges in parallel and computing the perfect matching in $G'\setminus \{e\}$ If the min weight is unchanged implies that the edge is not in $P$.Once we get hold of $P$ we can get $M$ the maximum matching in the original graph as $M=P\cap E(G)$ . Now if $w(P)=W$ then $|M|=n-y$ where $y=\lfloor \frac{W}{2^{\lceil(c+2)\log_2(c'n)\rceil}}\rfloor$.
+
+\break
+\textbf{Main Theorem} \textit{Maximum Matching Search in graphs with $NVC$ is in $SPL$.}\\
+\textbf{Proof}Since the edge weights are polynomially bounded they can be computed in logspace. Moreover computation of the coefficients of a determinant is in $GAP-L$.Since we are only querying whether the coefficient is zero 1 uptil the least degree coefficient hence the computation is in $SPL$.
+So we are able to extract a min-weight generalized perfect matching in the graph $G'$ in $L^{SPL}=SPL$. Hence proved.
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Reduction From Search to Decision}
+	\begin{itemize}
+		\item In this part we will reduce the problem of finding a maximum a matching to oracle calls for determining the size of a maximum matching in the presence of a parallel algorithm to find a perfect matching and a parallel algorithm to solve the bipartite version of a maximum matching.
+		\item We will use \textit{ Edmond Gallai Decomposition} for doing so.
+		 
+	\end{itemize} \break
+	\textbf{Edmond Gallai Decomposition}-\\
+	\begin{itemize}
+		\item We can decompose a graph $G$ into the following 3 parts-
+		\begin{itemize}
+			\item $D(G)$- Set of vertices $v$ such that there exist a maximum matching of $G$ without matching $v$.
+			\item $A(G)$- Set of vertices which are adjacent to $D(G) $ and not in $D(G)$.
+			\item $C(G)=V(G)\setminus(A(G) \cup D(G))$
+		\end{itemize}
+	\item Now this decomposition has the following properties.  Let $M$ be a maximum matching of $G$ then we have that-
+	\begin{itemize}
+		\item $M$ induces a perfect matching on $C(G)$.
+		\item $M$ induces a near perfect matching on each component of $D(G)$.
+		\item $M$ matches each vertex of $A(G) $ to a distinct component in $D(G)$.
+	\end{itemize}
+	\end{itemize}
+	\break
+	\begin{itemize}
+		\item The set $D(G)$ can be constructed using subroutine to maximum matching size computation as $v\in D(G) \iff \nu(G)=\nu(G-v)$ where $\nu(G)$ denotes size of maximum matching in $G$.
+		\item Once $D(G)$ is constructed $A(G),C(G)$ can be constructed easily .
+		\item So to find a maximum matching we just need to do the following using \textit{Edmond Gallai Decomposition} .
+		\item First compute a perfect matching on $C(G)$.
+		\item A perfect matching in each component of $D(G)$ minus an arbitary vertex.
+		\item A maximum matching in the bipartite graph formed by contracting each component of $D(G)$ into a single vertex and adding an edge to each vertex in $a\in A(G)$ such that the corresponding  component had an edge to $a$.
+		\item So we get the following lemma-
+		\item \textbf{Lemma}- \textit{For any class of graphs closed under vertex deletions and edge contractions , there is an $NC$ algorithm for \textit{Maximum-Matching Search} in the class with oracle queries to \textit{Maximum-Matching Size}(For Edmond Gallai Decomposition), Maximum-Bipartite Search and Perfect-Matching Search all for the same class of graphs.}
+		\item For planar graphs we know they are closed under vertex deletion and edge contraction , and perfect matching computation in planar graphs is in $NC$ and \textit{Maximum-Bipartite Matching Search} can be done using previous algorithm as $NVC $ is easy to find for bipartite graphs.
+		\item So we get that for  planar graphs \textit{Maximum-Matching Search} $NC$ reduces to \textit{Maximum-Matching Decision}.
+	\end{itemize}
+
+\end{frame}
+	\begin{frame}[allowframebreaks]{References}
+		
+		\printbibliography[heading=none]
+			
+	\end{frame}
+	
+\end{document}

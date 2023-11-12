@@ -1,0 +1,190 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{ynt/global//global/global}
+    \entry{agrawal07}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=643dfbd788f89e01e0d8f3dcfca6a7c8}{%
+           family={Agrawal},
+           familyi={A\bibinitperiod},
+           given={Manindra},
+           giveni={M\bibinitperiod}}}%
+        {{hash=ff73badbcfbbb306dd2687294304b3be}{%
+           family={Hoang},
+           familyi={H\bibinitperiod},
+           given={Thanh\bibnamedelima Minh},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=2f5c6ffde356b8e55ef940f9de309751}{%
+           family={Thierauf},
+           familyi={T\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=e0ad3eea03cdb692141e079403b79b25}{%
+           family={Thomas},
+           familyi={T\bibinitperiod},
+           given={Wolfgang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e32c8bc663c64998cf84794f526c8439}{%
+           family={Weil},
+           familyi={W\bibinitperiod},
+           given={Pascal},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{fullhash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{bibnamehash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{authorbibnamehash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{authornamehash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{authorfullhash}{34792ae37c0452c3dc9e243e130a8af7}
+      \strng{editorbibnamehash}{10b3f5b1b9ff1eb6ff3b643768a65aa1}
+      \strng{editornamehash}{10b3f5b1b9ff1eb6ff3b643768a65aa1}
+      \strng{editorfullhash}{10b3f5b1b9ff1eb6ff3b643768a65aa1}
+      \field{labelalpha}{AHT07}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{{STACS} 2007, 24th Annual Symposium on Theoretical Aspects of Computer Science, Aachen, Germany, February 22-24, 2007, Proceedings}
+      \field{series}{Lecture Notes in Computer Science}
+      \field{title}{The Polynomially Bounded Perfect Matching Problem Is in {NC} \({}^{\mbox{2}}\)}
+      \field{volume}{4393}
+      \field{year}{2007}
+      \field{pages}{489\bibrangedash 499}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1007/978-3-540-70918-3\_42
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/978-3-540-70918-3\_42
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/978-3-540-70918-3%5C_42
+      \endverb
+    \endentry
+    \entry{htm10}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{hash=ff73badbcfbbb306dd2687294304b3be}{%
+           family={Hoang},
+           familyi={H\bibinitperiod},
+           given={Thanh\bibnamedelima Minh},
+           giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{ff73badbcfbbb306dd2687294304b3be}
+      \strng{fullhash}{ff73badbcfbbb306dd2687294304b3be}
+      \strng{bibnamehash}{ff73badbcfbbb306dd2687294304b3be}
+      \strng{authorbibnamehash}{ff73badbcfbbb306dd2687294304b3be}
+      \strng{authornamehash}{ff73badbcfbbb306dd2687294304b3be}
+      \strng{authorfullhash}{ff73badbcfbbb306dd2687294304b3be}
+      \field{labelalpha}{Hoa10}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2010 IEEE 25th Annual Conference on Computational Complexity}
+      \field{title}{On the Matching Problem for Special Graph Classes}
+      \field{year}{2010}
+      \field{pages}{139\bibrangedash 150}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/CCC.2010.21
+      \endverb
+    \endentry
+    \entry{datta18}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=afad0b4c399ee1630f04ab61f5184ef9}{%
+           family={Datta},
+           familyi={D\bibinitperiod},
+           given={Samir},
+           giveni={S\bibinitperiod}}}%
+        {{hash=6d4e2ef03cdb121aad9cf714d28eede4}{%
+           family={Kulkarni},
+           familyi={K\bibinitperiod},
+           given={Raghav},
+           giveni={R\bibinitperiod}}}%
+        {{hash=c4665f76db9bd49e7d08a82359ed197b}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Ashish},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9e724dab8e6cee762c6c06442bb39ab0}{%
+           family={0001},
+           familyi={0\bibinitperiod},
+           given={Anish\bibnamedelima Mukherjee},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \name{editor}{3}{}{%
+        {{hash=3df2a6ead31c13d79b914388974d7b3c}{%
+           family={Hsu},
+           familyi={H\bibinitperiod},
+           given={Wen-Lian},
+           giveni={W\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=cb69b197dfba15a0bb9e71da8e10ec5a}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Der-Tsai},
+           giveni={D\bibinithyphendelim T\bibinitperiod}}}%
+        {{hash=db0519d7ac75a1b89e0a05f352a84b6f}{%
+           family={Liao},
+           familyi={L\bibinitperiod},
+           given={Chung-Shou},
+           giveni={C\bibinithyphendelim S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Schloss Dagstuhl - Leibniz-Zentrum fuer Informatik}%
+      }
+      \strng{namehash}{99bffb3c3d979597871107480011875b}
+      \strng{fullhash}{c4b0838a718699f3390996eb0094f520}
+      \strng{bibnamehash}{99bffb3c3d979597871107480011875b}
+      \strng{authorbibnamehash}{99bffb3c3d979597871107480011875b}
+      \strng{authornamehash}{99bffb3c3d979597871107480011875b}
+      \strng{authorfullhash}{c4b0838a718699f3390996eb0094f520}
+      \strng{editorbibnamehash}{9d4e7a039a4169d1c17f1d14a36d957a}
+      \strng{editornamehash}{9d4e7a039a4169d1c17f1d14a36d957a}
+      \strng{editorfullhash}{9d4e7a039a4169d1c17f1d14a36d957a}
+      \field{labelalpha}{Dat+18}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{29th International Symposium on Algorithms and Computation, ISAAC 2018, December 16-19, 2018, Jiaoxi, Yilan, Taiwan}
+      \field{isbn}{978-3-95977-094-1}
+      \field{series}{LIPIcs}
+      \field{title}{Planar Maximum Matching: Towards a Parallel Algorithm}
+      \field{volume}{123}
+      \field{year}{2018}
+      \verb{doi}
+      \verb 10.4230/LIPIcs.ISAAC.2018.21
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.4230/LIPIcs.ISAAC.2018.21
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.4230/LIPIcs.ISAAC.2018.21
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

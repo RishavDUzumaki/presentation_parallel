@@ -1,0 +1,8 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{Abstract}{3}{0}{1}
+\beamer@sectionintoc {2}{Preliminaries}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Definitions}{7}{0}{2}
+\beamer@subsectionintoc {2}{2}{Complexity Classes}{14}{0}{2}
+\beamer@sectionintoc {3}{Polynomially Bounded Perfect Matching Problem in $NC^2$}{18}{0}{3}
+\beamer@sectionintoc {4}{On the Matching Problem for Special Graphs}{35}{0}{4}
+\beamer@sectionintoc {5}{Planar Maximum Matching : Towards a Parallel Algorithm}{62}{0}{5}
